@@ -1,17 +1,16 @@
 import { PassThrough } from 'stream'
 
 class LazyWritable extends PassThrough{
-    constructor(cb){
-        super();
-        this.cb = cb;
+    constructor(fn, options){
+        super(options);
+        this.fn = fn;
         this.wasConsumed = false;
         this.writableStream = null;
     }
 
     _write(chunk, enc, cb){
-        if(!this.wasConsumed){
-            this.wasConsumed = true;
-            this.writableStream = this.cb();
+        if(this.writableStream === null){
+            this.writableStream = this.fn();
         }
 
         const shouldContinue = this.writableStream.write(chunk, enc);

@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const readablestream = new LazyReadable( () => createReadStream( join(__dirname, 'files/input.txt') ));
 
-const writeablestream = new LazyWritable( () => createWriteStream( join(__dirname, 'files/output.txt') ));
+const writeablestream = new LazyWritable( () => createWriteStream( join(__dirname, 'files/output.txt'), { highWaterMark: 1 } ));
 
 await wait(5);
 

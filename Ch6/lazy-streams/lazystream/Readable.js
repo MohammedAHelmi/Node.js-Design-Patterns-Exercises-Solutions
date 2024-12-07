@@ -1,23 +1,23 @@
 import { PassThrough } from 'stream'
 
 class LazyReadable extends PassThrough{
-    constructor(fn){
-        super();
+    constructor(fn, options){
+        super(options);
         this.fn = fn;
-        this.wasConsumed = false;
+        this.readableStream = null;
     }
 
-    _read(){
-        if(this.wasConsumed) return;
-        this.wasConsumed = true;
+    _read(sz){
+        if(this.readableStream !== null){
+            return super._read(sz);
+        }
         
-        
-        const readableStream = this.fn();
+        this.readableStream = this.fn();
 
         const emitError = this.emit.bind(this, 'error');
-        readableStream.on('error', emitError);
-        
-        readableStream.pipe(this);
+        this.readableStream.once('error', emitError);
+
+        this.readableStream.pipe(this);
     }
 }
 
