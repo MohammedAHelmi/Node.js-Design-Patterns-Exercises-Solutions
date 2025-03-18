@@ -1,5 +1,5 @@
 {
-  "name": "9.5-queues-with-iterators",
+  "name": "11.1-proxy-with-pre-initialization-queues",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
